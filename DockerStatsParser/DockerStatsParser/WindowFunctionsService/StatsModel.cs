@@ -8,7 +8,6 @@ public class StatsModel
     public List<double> MemUsageGib { get; set; } = new();
     public List<double> MemUsagePercentage { get; set; } = new();
     public List<double> NetIOGb { get; set; } = new();
-    public List<double> BlockIO { get; set; } = new();
+    //public List<double> BlockIO { get; set; } = new();
     public List<int> Pids { get; set; } = new();
-
 }

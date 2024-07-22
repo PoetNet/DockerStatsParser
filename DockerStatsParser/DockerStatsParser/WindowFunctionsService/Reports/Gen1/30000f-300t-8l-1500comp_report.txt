@@ -1,0 +1,33 @@
+ContainerId: 955af9b7cf0
+Name:        window-functions-service
+
+FunctionsCount:   30000
+TagsCount:        300
+LevelsCount:      8
+ComponentsCount:  1500
+
+AVG:
+
+CPUPercentage:      21,07
+MemUsageGib:        15,62
+MemUsagePercentage: 7,24
+NetIOGb:            27,42
+Pids:               40,18
+
+MIN:
+
+CPUPercentage:      0,28
+MemUsageGib:        15,62
+MemUsagePercentage: 6,94
+NetIOGb:            27,3
+Pids:               36
+
+MAX:
+
+CPUPercentage:      63,57
+MemUsageGib:        15,62
+MemUsagePercentage: 7,58
+NetIOGb:            27,6
+Pids:               48
+
+String of logs processed: 4037
