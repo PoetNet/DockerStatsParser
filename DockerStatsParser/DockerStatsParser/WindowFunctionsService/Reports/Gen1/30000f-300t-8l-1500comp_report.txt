@@ -1,33 +1,48 @@
-ContainerId: 955af9b7cf0
-Name:        window-functions-service
+Name: window-functions-service
 
 FunctionsCount:   30000
 TagsCount:        300
 LevelsCount:      8
 ComponentsCount:  1500
 
+
 AVG:
 
-CPUPercentage:      21,07
-MemUsageGib:        15,62
-MemUsagePercentage: 7,24
-NetIOGb:            27,42
-Pids:               40,18
+Calculation time, ms:591390,38
+
+CPU Percentage:      20,99
+MemUsage Mib:        848,72
+MemUsage Percentage: 5,31
+NetI Gb:             13,65
+NetO Gb:             9,36
+BlockI kB:           238
+BlockO B:            0
+Pids:                39,54
 
 MIN:
 
-CPUPercentage:      0,28
-MemUsageGib:        15,62
-MemUsagePercentage: 6,94
-NetIOGb:            27,3
-Pids:               36
+Calculation time, ms:560999
+
+CPU Percentage:      0,26
+MemUsage Mib:        827,5
+MemUsage Percentage: 5,17
+NetI Gb:             13,5
+NetO Gb:             9,28
+BlockI kb:           238
+BlockO kb:           0
+Pids:                36
 
 MAX:
 
-CPUPercentage:      63,57
-MemUsageGib:        15,62
-MemUsagePercentage: 7,58
-NetIOGb:            27,6
-Pids:               48
+Calculation time, ms:623999
 
-String of logs processed: 4037
+CPU Percentage:      51,32
+MemUsage Mib:        880,4
+MemUsage Percentage: 5,51
+NetI Gb:             13,8
+NetO Gb:             9,44
+BlockI kb:           238
+BlockO kb:           0
+Pids:                51
+
+String of logs processed: 3536

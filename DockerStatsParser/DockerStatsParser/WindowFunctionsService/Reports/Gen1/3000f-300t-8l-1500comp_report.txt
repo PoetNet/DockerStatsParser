@@ -1,0 +1,47 @@
+Name:        window-functions-service
+
+FunctionsCount:   3000
+TagsCount:        300
+LevelsCount:      8
+ComponentsCount:  1500
+
+AVG:
+
+Calculation time, ms:42817,5
+
+CPU Percentage:      15,12
+MemUsage MiB:        730,831
+MemUsage Percentage: 4,57
+NetI MB:             545,13
+NetO MB:             377,55
+BlockI B:            0
+BlockO B:            0
+Pids:                45,99
+
+MIN:
+
+Calculation time, ms:24997
+
+CPU Percentage:      0,26
+MemUsage MiB:        701,1
+MemUsage Percentage: 4,38
+NetI MB:             1
+NetO MB:             291
+BlockI B:            0
+BlockO B:            0
+Pids:                37
+
+MAX:
+
+Calculation time, ms:67994
+
+CPU Percentage:      33,91
+MemUsage MiB:        757,6
+MemUsage Percentage: 4,74
+NetI MB:             1000
+NetO MB:             463
+BlockI B:            0
+BlockO B:            0
+Pids:                57
+
+String of logs processed: 4485

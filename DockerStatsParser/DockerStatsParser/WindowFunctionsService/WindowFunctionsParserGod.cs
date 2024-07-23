@@ -1,27 +1,20 @@
 ﻿using SqlScriptGenerator.WindowFunctionsService;
 using System.Globalization;
-using System.Text;
+using System.Text.RegularExpressions;
 
 namespace DockerStatsParser.WindowFunctionsService;
 
 public static class WindowFunctionsParserGod
 {
-    public static StatsModel ExtractValues(string statsLogs)
+    public static StatsModel ExtractLogsValues(string statsLogs)
     {
         StatsModel statsModel = new StatsModel();
 
-        string separator =
-            "CONTAINER ID   NAME                       CPU %     MEM USAGE / LIMIT     MEM %     NET I/O           BLOCK I/O   PIDS ";
+        string separatorPattern = @"CONTAINER\s+ID\s+NAME\s+CPU\s+%\s+MEM\s+USAGE\s+/\s+LIMIT\s+MEM\s+%\s+NET\s+I/O\s+BLOCK\s+I/O\s+PIDS";
+        Regex separatorRegex = new Regex(separatorPattern, RegexOptions.Compiled);
 
-        var logLines = statsLogs.Split(new[] { separator }, StringSplitOptions.RemoveEmptyEntries);
-
-        string firstLogString = logLines[0];
-
-        statsModel.ContainerId = firstLogString.Substring(0, 11);
-
-        int startIndex = 15;
-        int endIndex = firstLogString.IndexOf(' ', startIndex);
-        statsModel.Name = firstLogString.Substring(startIndex, endIndex - startIndex).Trim();
+        var logLines = separatorRegex.Split(statsLogs).Where(line => !string.IsNullOrWhiteSpace(line)).ToArray();        
+        
         foreach (var logLine in logLines)
         {
             var parts = logLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
@@ -34,34 +27,86 @@ public static class WindowFunctionsParserGod
                 statsModel.CPUPercentage.Add(cpu);
             }
 
-            targetPart = parts[5];
-            // MEM Usage (GiB)
+            targetPart = parts[3];
+            // MEM Usage (MiB)
             if (double.TryParse(targetPart.Substring(0, targetPart.Length - 3), NumberStyles.Any, CultureInfo.InvariantCulture, out double memUsageGib))
             {
-                statsModel.MemUsageGib.Add(memUsageGib);
+                if (parts[3].EndsWith("GiB"))
+                {
+                    memUsageGib *= 1024;
+                }
+                statsModel.MemUsageMib.Add(memUsageGib);
             }
 
             targetPart = parts[6];
             // MEM %
             if (
-                double.TryParse(targetPart.TrimEnd('%'), 
-                NumberStyles.Any, 
-                CultureInfo.InvariantCulture, 
+                double.TryParse(targetPart.TrimEnd('%'),
+                NumberStyles.Any,
+                CultureInfo.InvariantCulture,
                 out double memPercentage))
             {
                 statsModel.MemUsagePercentage.Add(memPercentage);
             }
 
-            targetPart = parts[7];
             // NET I/O (GB)
+
+            targetPart = parts[7];
             if (double.TryParse(
                 targetPart.Substring(0, targetPart.Length - 2),
                 NumberStyles.Any,
                 CultureInfo.InvariantCulture,
-                out double netIoGb))
+                out double netIGb))
             {
-                statsModel.NetIOGb.Add(netIoGb);
+                if (parts[7].EndsWith("GB"))
+                {
+                    netIGb *= 1024;
+                }
+
+                statsModel.NetIGb.Add(netIGb);
             }
+
+            targetPart = parts[9];
+            if (double.TryParse(
+                targetPart.Substring(0, targetPart.Length - 2),
+                NumberStyles.Any,
+                CultureInfo.InvariantCulture,
+                out double netOGb))
+            {
+                if (parts[9].EndsWith("GB"))
+                {
+                    netOGb *= 1024;
+                }
+
+                statsModel.NetOGb.Add(netOGb);
+            }
+
+            // BLOCK I/O
+
+            //(int i, string iType) = ExtractParts(parts[10]);
+            targetPart = parts[10];
+            if (int.TryParse(
+                targetPart.Substring(0, targetPart.Length - 1),
+                NumberStyles.Any,
+                CultureInfo.InvariantCulture,
+                out int i))
+            {
+                statsModel.BlockI.Add(i);
+            }
+
+            //statsModel.BlockIType = iType;
+
+            //(int o, string oType) = ExtractParts(parts[12]);
+            targetPart = parts[12];
+            if (int.TryParse(
+                targetPart.Substring(0, targetPart.Length - 1),
+                NumberStyles.Any,
+                CultureInfo.InvariantCulture,
+                out int o))
+            {
+                statsModel.BlockO.Add(o);
+            }
+            //statsModel.BlockOType = oType;
 
             targetPart = parts[13];
             // PIDs
@@ -72,5 +117,40 @@ public static class WindowFunctionsParserGod
         }
 
         return statsModel;
+    }
+    public static List<int> ExtractTimeValues(string input)
+    {
+        List<int> timeValues = new List<int>();
+
+        MatchCollection matches = Regex.Matches(input, @"\b\d+\s*ms\b");
+
+        foreach (Match match in matches)
+        {
+            string value = match.Value.Replace("ms", "").Trim();
+            if (int.TryParse(value, out int time))
+            {
+                timeValues.Add(time);
+            }
+        }
+
+        return timeValues;
+    }
+
+    public static (int NumericPart, string StringPart) ExtractParts(string input)
+    {
+        Match match = Regex.Match(input, @"^\d+");
+
+        if (match.Success)
+        {
+            string numericPartStr = match.Groups[1].Value;
+            string stringPart = match.Groups[2].Value;
+
+            if (int.TryParse(numericPartStr.TrimEnd('}').TrimStart('{'), out int numericPart))
+            {
+                return (numericPart, stringPart);
+            }
+        }
+
+        return (0, input);
     }
 }
