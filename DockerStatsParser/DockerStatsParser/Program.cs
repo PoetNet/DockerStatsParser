@@ -1,6 +1,6 @@
 ﻿using DockerStatsParser.WindowFunctionsService;
 
-int funcCount = 25000;
+int funcCount = 30000;
 int tagsCount = 300;
 int levelsCount = 8;
 int componentsCount = 1500;

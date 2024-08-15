@@ -396,3 +396,4 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/DockerStatsParser/DockerStatsParser/WindowFunctionsService/Reports/Gen1/*

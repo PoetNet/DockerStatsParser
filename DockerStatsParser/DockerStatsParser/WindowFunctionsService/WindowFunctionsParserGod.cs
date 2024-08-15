@@ -17,7 +17,8 @@ public static class WindowFunctionsParserGod
         
         foreach (var logLine in logLines)
         {
-            var parts = logLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            string currentLogLine = logLine.Trim();
+            var parts = currentLogLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             if (parts.Length < 14) continue;
 
             string targetPart = parts[parts.Length - 12];
@@ -50,7 +51,6 @@ public static class WindowFunctionsParserGod
             }
 
             // NET I/O (GB)
-
             targetPart = parts[7];
             if (double.TryParse(
                 targetPart.Substring(0, targetPart.Length - 2),
@@ -82,8 +82,6 @@ public static class WindowFunctionsParserGod
             }
 
             // BLOCK I/O
-
-            //(int i, string iType) = ExtractParts(parts[10]);
             targetPart = parts[10];
             if (int.TryParse(
                 targetPart.Substring(0, targetPart.Length - 1),
@@ -94,9 +92,6 @@ public static class WindowFunctionsParserGod
                 statsModel.BlockI.Add(i);
             }
 
-            //statsModel.BlockIType = iType;
-
-            //(int o, string oType) = ExtractParts(parts[12]);
             targetPart = parts[12];
             if (int.TryParse(
                 targetPart.Substring(0, targetPart.Length - 1),
@@ -106,7 +101,6 @@ public static class WindowFunctionsParserGod
             {
                 statsModel.BlockO.Add(o);
             }
-            //statsModel.BlockOType = oType;
 
             targetPart = parts[13];
             // PIDs
